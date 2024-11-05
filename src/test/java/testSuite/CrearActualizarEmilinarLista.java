@@ -2,6 +2,7 @@ package testSuite;
 
 import activities.CrearLista;
 import activities.PaginaPrincipal;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class CrearActualizarEmilinarLista {
@@ -12,12 +13,16 @@ public class CrearActualizarEmilinarLista {
     public void verificarTodo(){
 
         //Crear Lista
-
         String tituloLista = "Examen final";
         paginaPrincipal.menuHamburquesa.click();
         paginaPrincipal.editarListaButton.click();
         crearLista.creaListaButton.click();
         crearLista.anadirTituloLista.setText(tituloLista);
         crearLista.guardarTareaButton.click();
+
+        Assertions.assertTrue(crearLista.ItemLista(tituloLista).isControlDisplayed(), "Error la lista no fue creada");
+
+        //Eliminar Lista
+
     }
 }
