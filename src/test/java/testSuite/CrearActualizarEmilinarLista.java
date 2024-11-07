@@ -1,28 +1,48 @@
 package testSuite;
 
-import activities.CrearLista;
-import activities.PaginaPrincipal;
+import activities.EditListScreen;
+import activities.ListFormScreen;
+import activities.MainScreen;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import session.Session;
 
 public class CrearActualizarEmilinarLista {
-    private PaginaPrincipal paginaPrincipal = new PaginaPrincipal();
-    private CrearLista crearLista = new CrearLista();
+    MainScreen mainScreen = new MainScreen();
+    ListFormScreen listFormScreen = new ListFormScreen();
+    EditListScreen editListScreen = new EditListScreen();
 
     @Test
-    public void verificarTodo(){
+    public void listCRUDTest(){
+        mainScreen.menuButton.click();
+        mainScreen.editListButton.click();
+        editListScreen.addListButton.click();
+        listFormScreen.tittleTxtBx.setText("Examen1");
+        listFormScreen.colorButton.click();
+        listFormScreen.saveButton.click();
+        editListScreen.newListButton.click();
 
-        //Crear Lista
-        String tituloLista = "Examen final";
-        paginaPrincipal.menuHamburquesa.click();
-        paginaPrincipal.editarListaButton.click();
-        crearLista.creaListaButton.click();
-        crearLista.anadirTituloLista.setText(tituloLista);
-        crearLista.guardarTareaButton.click();
+        Assertions.assertEquals("Examen1",listFormScreen.tittleTxtBx.getText(),
+                "ERROR no se creo la lista");
 
-        Assertions.assertTrue(crearLista.ItemLista(tituloLista).isControlDisplayed(), "Error la lista no fue creada");
+        listFormScreen.tittleTxtBx.clearSetText("Examen1Updated");
+        listFormScreen.saveButton.click();
+        editListScreen.newListButton.click();
 
-        //Eliminar Lista
+        Assertions.assertEquals("Examen11Updated",listFormScreen.tittleTxtBx.getText(),
+                "ERROR no se actualizo la lista");
 
+        listFormScreen.deleteButton.click();
+        listFormScreen.confirmDeleteButton.click();
+
+        Assertions.assertFalse(editListScreen.newListButton.isControlDisplayed(),
+                "ERROR no se eliminó la lista");
+
+    }
+
+    @AfterEach
+    public void close(){
+        Session.getInstance().closeApp();
     }
 }
